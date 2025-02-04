@@ -16,16 +16,34 @@ gs4_auth()
 
 ```{r}
 sheet_url <- "https://docs.google.com/spreadsheets/d/14Qx-K3Q7ih31Xlq6viIY_CNBGaTi7b1dZFdgj5BKiYk"
-# parks <- read_csv("~/Google Drive/Shared drives/stat285_winter25_crwa/08 derived_data")
 falls_creek_park <- read_sheet(sheet_url, col_types = "c")
 colnames(falls_creek_park)
+falls_creek_park <- falls_creek_park %>%
+  mutate(Timestamp = gsub("\n", " ", Timestamp),
+         Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
+str(falls_creek_park)
 ```
 
 
 ```{r}
-falls_creek_park <- falls_creek_park %>%
+sheet_url <- "https://docs.google.com/spreadsheets/d/1DYf9GIkIHNRmVmpiz8NvM7-Y05Fj4FNiNhO4beoPwXo"
+velzke_park <- read_sheet(sheet_url, col_types = "c")
+colnames(velzke_park)
+velzke_park <- velzke_park %>%
   mutate(Timestamp = gsub("\n", " ", Timestamp),
          Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
-falls_creek_park
+str(velzke_park)
+```
+
+```{r}
+sheet_url <- "https://docs.google.com/spreadsheets/d/1E6IaEsva8njQ0jSNdOzquGCZq1cNdgugaJb_Kto050A"
+shager_park <- read_sheet(sheet_url, col_types = "c")
+colnames(shager_park)
+shager_park <- shager_park %>%
+  mutate(Timestamp = gsub("\n", " ", Timestamp),
+         Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
+str(shager_park)
+# shager_park %>%
+#   filter(!inherits(`Timestamp`, "POSIXct"))
 ```
 
