@@ -1,5 +1,31 @@
 ---
 title: "preliminary_analysis"
+Author: "Geoffrey Jing and Ryosuke Mega"
 output: html_document
 ---
+
+Preliminary Data Loading
+
+```{r}
+library(googlesheets4)
+library(tidyverse)
+library(patchwork)
+library(ggthemes)
+gs4_auth()
+```
+
+```{r}
+sheet_url <- "https://docs.google.com/spreadsheets/d/14Qx-K3Q7ih31Xlq6viIY_CNBGaTi7b1dZFdgj5BKiYk"
+# parks <- read_csv("~/Google Drive/Shared drives/stat285_winter25_crwa/08 derived_data")
+falls_creek_park <- read_sheet(sheet_url, col_types = "c")
+colnames(falls_creek_park)
+```
+
+
+```{r}
+falls_creek_park <- falls_creek_park %>%
+  mutate(Timestamp = gsub("\n", " ", Timestamp),
+         Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
+falls_creek_park
+```
 
