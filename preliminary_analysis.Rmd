@@ -21,7 +21,7 @@ colnames(falls_creek_park)
 falls_creek_park <- falls_creek_park %>%
   mutate(Timestamp = gsub("\n", " ", Timestamp),
          Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
-str(falls_creek_park)
+#str(falls_creek_park)
 ```
 
 
@@ -32,7 +32,7 @@ colnames(velzke_park)
 velzke_park <- velzke_park %>%
   mutate(Timestamp = gsub("\n", " ", Timestamp),
          Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
-str(velzke_park)
+#str(velzke_park)
 ```
 
 ```{r}
@@ -42,8 +42,117 @@ colnames(shager_park)
 shager_park <- shager_park %>%
   mutate(Timestamp = gsub("\n", " ", Timestamp),
          Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
-str(shager_park)
+#str(shager_park)
 # shager_park %>%
 #   filter(!inherits(`Timestamp`, "POSIXct"))
+```
+
+```{r}
+sheet_url <- "https://docs.google.com/spreadsheets/d/1PT7vfE_qcSpi1mcYf1cAI0l9sRPNRqkrWpHFeRyl7uQ"
+ackman_park <- read_sheet(sheet_url, col_types = "c")
+colnames(ackman_park)
+ackman_park <- ackman_park %>%
+  mutate(Timestamp = gsub("\n", " ", Timestamp),
+         Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
+#str(ackman_park)
+```
+
+```{r}
+sheet_url <- "https://docs.google.com/spreadsheets/d/1DzORfuDsQbyJQM6hNuhY_UOLRvPoCKfZhwrhAYWlgIw"
+albers_park <- read_sheet(sheet_url, col_types = "c")
+colnames(albers_park)
+albers_park <- albers_park %>%
+  mutate(Timestamp = gsub("\n", " ", Timestamp),
+         Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
+#str(albers_park)
+```
+
+```{r}
+sheet_url <- "https://docs.google.com/spreadsheets/d/10F0vnMuTaBH2WmgfZ7ULDLqm8em2pyHR5i2H5BGUj84"
+cannon_rvr_wildness_area_all <- read_sheet(sheet_url, col_types = "c")
+colnames(cannon_rvr_wildness_area_all)
+cannon_rvr_wildness_area_all <- cannon_rvr_wildness_area_all %>%
+  mutate(Timestamp = gsub("\n", " ", Timestamp),
+         Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
+#str(cannon_rvr_wildness_area_all)
+```
+
+```{r}
+sheet_url <- "https://docs.google.com/spreadsheets/d/14reTrAk2w0lb5_1cCyayXhqLNmD9GBJ7UhqP9pIXBeE"
+caron_park <- read_sheet(sheet_url, col_types = "c")
+colnames(caron_park)
+caron_park <- caron_park %>%
+  mutate(Timestamp = gsub("\n", " ", Timestamp),
+         Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
+#str(caron_park)
+```
+
+```{r}
+sheet_url <- "https://docs.google.com/spreadsheets/d/1nas8nQvkhEzKg-IRwyfdF_ohRv9LRWBnPej8XYxcv_E"
+circle_lake_park <- read_sheet(sheet_url, col_types = "c")
+colnames(caron_park)
+circle_lake_park <- circle_lake_park %>%
+  mutate(Timestamp = gsub("\n", " ", Timestamp),
+         Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
+#str(circle_lake_park)
+```
+
+```{r}
+sheet_url <- "https://docs.google.com/spreadsheets/d/1voDUBr8AE8nS6Uz9PS4HrtJxrNRpgT3JcxEtzMGsUC8"
+hirdler_park <- read_sheet(sheet_url, col_types = "c")
+colnames(hirdler_park)
+hirdler_park <- hirdler_park %>%
+  mutate(Timestamp = gsub("\n", " ", Timestamp),
+         Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
+#str(hirdler_park)
+```
+
+```{r}
+sheet_url <- "https://docs.google.com/spreadsheets/d/1HVckFwhwWVk7BuPQKdVk4F-AUQCl66aKxsqzpszGmD8"
+kalina_park <- read_sheet(sheet_url, col_types = "c")
+colnames(kalina_park)
+kalina_park <- kalina_park %>%
+  mutate(Timestamp = gsub("\n", " ", Timestamp),
+         Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
+#str(kalina_park)
+```
+
+```{r}
+sheet_url <- "https://docs.google.com/spreadsheets/d/1e6Fn2KHVF_dlx9o1SRJMWvVwLvObQUCPWvwS6QsavWA"
+king_mill_park <- read_sheet(sheet_url, col_types = "c")
+colnames(king_mill_park)
+king_mill_park <- king_mill_park %>%
+  mutate(Timestamp = gsub("\n", " ", Timestamp),
+         Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
+#str(king_mill_park)
+```
+
+```{r}
+sheet_url <- "https://docs.google.com/spreadsheets/d/1ImLrM5gGGqJdPaLdne5upCe2z1G6VDLY4bBvvvVqo_o"
+mccullough_park <- read_sheet(sheet_url, col_types = "c")
+colnames(king_mill_park)
+mccullough_park <- mccullough_park %>%
+  mutate(Timestamp = gsub("\n", " ", Timestamp),
+         Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
+#str(mccullough_park)
+```
+
+```{r}
+save(ackman_park, file = "ackman_park.rda")
+save(albers_park, file = "albers_park.rda")
+save(cannon_rvr_wildness_area_all, file = "cannon_rvr_wildness_area_all.rda")
+save(caron_park, file = "caron_park.rda")
+save(circle_lake_park, file = "circle_lake_park.rda")
+save(falls_creek_park, file = "falls_creek_park.rda")
+save(hirdler_park, file = "hirdler_park.rda")
+save(kalina_park, file = "kalina_park.rda")
+save(king_mill_park, file = "king_mill_park.rda")
+save(mccullough_park, file = "mccullough_park.rda")
+save(shager_park, file = "shager_park.rda")
+save(velzke_park, file = "velzke_park.rda")
+```
+
+```{r}
+park_all <- rbind(ackman_park, albers_park, cannon_rvr_wildness_area_all, caron_park, circle_lake_park, falls_creek_park, hirdler_park, kalina_park, king_mill_park, mccullough_park, shager_park, velzke_park)
 ```
 
