@@ -170,7 +170,6 @@ park_all <- park_all %>%
 
 park_all <- park_all %>%
   mutate(
-    Location = str_squish(Location),
     `Park Name` = case_when(
       str_detect(Location, "3732") ~ "Velzke Park",
       str_detect(Location, "2239") ~ "Shager Park",
@@ -187,6 +186,7 @@ park_all <- park_all %>%
     )
   )
 head(park_all)
+save(park_all, file = "park_all.rda")
 ```
 
 ```{r}
