@@ -156,3 +156,42 @@ save(velzke_park, file = "velzke_park.rda")
 park_all <- rbind(ackman_park, albers_park, cannon_rvr_wildness_area_all, caron_park, circle_lake_park, falls_creek_park, hirdler_park, kalina_park, king_mill_park, mccullough_park, shager_park, velzke_park)
 ```
 
+```{r}
+library(dplyr)
+library(lubridate)
+
+park_all <- park_all %>%
+  mutate(
+    Year = year(Timestamp),
+    Month = month(Timestamp, label = TRUE),  # Month as abbreviated name (Jan, Feb, etc.)
+    Weekday = wday(Timestamp, label = TRUE), # Weekday as abbreviated name (Sun, Mon, etc.)
+    Hour = hour(Timestamp)
+  )
+
+park_all <- park_all %>%
+  mutate(
+    Location = str_squish(Location),
+    `Park Name` = case_when(
+      str_detect(Location, "3732") ~ "Velzke Park",
+      str_detect(Location, "2239") ~ "Shager Park",
+      str_detect(Location, "14398") ~ "Mccullough Park",
+      str_detect(Location, "2100") ~ "King Mill Park",
+      str_detect(Location, "11442") ~ "Kalina Park",
+      str_detect(Location, "15100") ~ "Hirdler Park",
+      str_detect(Location, "2050") ~ "Falls Creek Park",
+      str_detect(Location, "4560") ~ "Circle Lake Park",
+      str_detect(Location, "6816") ~ "Caron Park",
+      str_detect(Location, "8662") ~ "Albers Park",
+      str_detect(Location, "4080") ~ "Ackman Park",
+      str_detect(Location, "3471|13996") ~ "Cannon River Wilderness Area Park"
+    )
+  )
+head(park_all)
+```
+
+```{r}
+# can see which values have null for park names, might want to clean this later
+null_vals <- park_all %>% filter(is.na(`Park Name`))
+```
+
+
