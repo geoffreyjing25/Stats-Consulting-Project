@@ -1,0 +1,16 @@
+---
+title: "time_analysis"
+output: html_document
+---
+
+```{r}
+# add day of week variable
+park_with_time <- park_all %>%
+  mutate(`Day Type` = case_when(
+    Weekday %in% c("Mon", "Tue", "Wed", "Thu") ~ "Weekday",
+    Weekday == "Fri" ~ "Fri",
+    Weekday %in% c("Sat", "Sun") ~ "Weekend"
+  )
+  )
+```
+
