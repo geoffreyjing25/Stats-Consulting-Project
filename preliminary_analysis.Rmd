@@ -195,3 +195,17 @@ null_vals <- park_all %>% filter(is.na(`Park Name`))
 ```
 
 
+```{r}
+library(stringr)
+library(dplyr)
+
+park_all$`Call Type` <- str_replace_all(park_all$`Call Type`, "\n", " ")
+park_all$`Call Type` <- str_replace_all(park_all$`Call Type`, "  ", " ")
+
+
+park_all <- park_all %>%
+  mutate(park_check = ifelse(`Call Type` == "Park Check", `Call Type`, NA),
+         extra_patrol = ifelse(`Call Type` == "Extra Patrol", `Call Type`, NA),
+         `Call Type` = ifelse(`Call Type` == "Park Check", NA, `Call Type`),
+         `Call Type` = ifelse(`Call Type` == "Extra Patrol", NA, `Call Type`)) 
+```
