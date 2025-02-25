@@ -220,3 +220,14 @@ park_all <- park_all %>%
   )
   )
 ```
+
+```{r}
+park_all <- park_all %>%
+  mutate(Season = case_when(Month == "Dec" | Month == "Jan" | Month == "Feb" ~ "Winter", 
+                            Month == "Mar" | Month == "Apr" | Month == "May" ~ "Spring",
+                            Month == "Jun" | Month == "Jul" | Month == "Aug"~ "Summer",
+                            Month == "Sep" | Month == "Oct" | Month == "Nov" ~ "Autumn",
+                            is.na(Month) ~ NA,
+                            TRUE ~ "Other"))
+```
+
