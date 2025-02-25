@@ -1,0 +1,91 @@
+---
+title: "frequency_graphs"
+output: html_document
+---
+
+```{r}
+library(stringr)
+library(dplyr)
+library(tidyverse)
+library(patchwork)
+library(ggthemes)
+library(ggplot2)
+```
+
+```{r}
+park_all_filtered <- park_all %>%
+  filter(!is.na(check_extra_other), !is.na(`Day Type`))
+ggplot(park_all_filtered, aes(x = check_extra_other)) +
+  geom_bar() +
+  labs(title = "Frequency of Call Types",
+       x = "Call Type",
+       y = "Call Frequency")
+```
+
+```{r}
+ggplot(park_all_filtered, aes(x = Season)) +
+  geom_bar() +
+  labs(title = "Total Call Frequency by Season",
+       x = "Season",
+       y = "Call Frequency")
+```
+
+```{r}
+ggplot(park_all_filtered, aes(x = `Day Type`)) +
+  geom_bar() +
+  labs(title = "Total Call Frequency by Day Type",
+       x = "Day Type",
+       y = "Call Frequency")
+```
+
+```{r}
+ggplot(park_all_filtered, aes(x = `Weekday`)) +
+  geom_bar() +
+  labs(title = "Total Call Frequency by Day of the Week",
+       x = "Day of the Week",
+       y = "Call Frequency")
+```
+
+
+```{r}
+# rename other as CRVC, calls for service
+ggplot(park_all_filtered, aes(x = check_extra_other)) +
+  geom_bar() +
+  facet_wrap(~ `Day Type`) +
+  labs(title = "Call Type Frequency by Day of Week",
+       x = "Call Type",
+       y = "Frequency")
+```
+
+```{r}
+ggplot(park_all_filtered, aes(x = check_extra_other)) +
+  geom_bar() +
+  facet_wrap(~ Season) +
+  labs(title = "Call Type Frequency by Season",
+       x = "Call Type",
+       y = "Frequency") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+# sort by frequency
+other_calls <- park_all %>%
+  filter(!check_extra_other %in% c("Park Check", "Extra Patrol")) %>%
+  filter(!is.na(`Call Type`))
+
+top_10_other <- other_calls %>%
+  count(`Call Type`) %>%
+  top_n(10, n) %>%
+  pull(`Call Type`)
+
+top_10_other_df <- other_calls %>%
+  filter(`Call Type` %in% top_10_other)
+
+ggplot(top_10_other_df, aes(x = `Call Type`)) +
+  geom_bar() +
+  labs(title = "Top 10 Call Types (Excluding Park Check & Extra Patrol)",
+       x = "Call Type",
+       y = "Frequency") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
