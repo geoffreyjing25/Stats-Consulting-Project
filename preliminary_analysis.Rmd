@@ -209,3 +209,14 @@ park_all <- park_all %>%
                                        is.na(`Call Type`) ~ NA,
                                        TRUE ~ "Other"))
 ```
+
+```{r}
+# add day of week variable
+park_all <- park_all %>%
+  mutate(`Day Type` = case_when(
+    Weekday %in% c("Mon", "Tue", "Wed", "Thu") ~ "Weekday",
+    Weekday == "Fri" ~ "Fri",
+    Weekday %in% c("Sat", "Sun") ~ "Weekend"
+  )
+  )
+```
