@@ -1,0 +1,67 @@
+```{r}
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+library(tidyverse)
+library(kableExtra)
+library(formattable)
+library(gridExtra)
+```
+
+```{r}
+albers_only <- park_all %>%
+  filter(`Park Name` == "Albers Park") %>%
+  mutate(Season = factor(Season, levels = c("Spring", "Summer", "Autumn", "Winter")),
+         `Hour type` = factor(`Hour type`, levels = c("Night", "Evening", "Afternoon", "Morning")),
+         check_extra_other = factor(check_extra_other, levels = c("Check/Patrol", "CFSV")))
+  
+
+albers_season_hour <- albers_only %>%
+  filter(check_extra_other == "CFSV") %>%
+  group_by(`Season`, `Hour type`) %>%  
+  summarize(call_count = n()) %>%
+  na.omit()
+
+a <- ggplot(albers_season_hour, aes(x = Season, y = call_count, fill = `Hour type`)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Season", y = "CFSV Frequancy", fill = "Hour type") +
+  theme_minimal() +
+  geom_text(data = subset(albers_season_hour, call_count > 5), aes(x = Season, y = call_count, label = call_count),
+            position = position_stack(vjust = 0.5), size = 3)+
+  labs(title = "CFSV Frequency By Season")
+
+ggsave("albers_hour.pdf", plot = a, width = 6, height = 4) 
+
+
+albers_year_check <- albers_only %>%
+  filter(Year != 2024) %>%
+  group_by(`Year`, check_extra_other) %>%  
+  summarize(call_count = n()) %>%
+  na.omit()
+
+b <- ggplot(albers_year_check, aes(x = Year, y = call_count, fill= check_extra_other)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Year", y = "CFSV Frequancy", fill= "CFSV or Patrol/Check") +
+  theme_minimal() +
+  geom_text(data = albers_year_check, aes(x = Year, y = call_count, label = call_count),
+            position = position_stack(vjust = 0.5), size = 3, color = "Black")+
+  labs(title = "CFSV Frequency And Patrol/Check Frequency")
+
+ggsave("albers_Patrol.pdf", plot = b, width = 6, height = 4) 
+
+
+top_call_types <- albers_only %>%
+  filter(check_extra_other=="CFSV")%>%
+  group_by(`Call Type`) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  arrange(desc(count)) %>%
+  slice_head(n = 5) %>%
+  mutate(Rank = paste0(1:5, c("st", "nd", "rd", "th", "th"))) %>% 
+  select(Rank, `Call Type`, count)
+
+formattable(top_call_types, 
+            align = c("l", "l", "l"),
+            table.attr = 'style="border-collapse: collapse; border-spacing: 0px;"',
+            caption = "Top 5 Call Types")
+
+```

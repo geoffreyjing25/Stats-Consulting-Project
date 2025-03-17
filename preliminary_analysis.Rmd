@@ -206,26 +206,20 @@ park_all$`Call Type` <- str_replace_all(park_all$`Call Type`, "  ", " ")
 park_all <- park_all %>%
   mutate(check_extra_other = case_when(`Call Type` %in% c("Park Check","Extra Patrol","Directed Patrol","Premise Check") ~ "Check/Patrol", 
                                        is.na(`Call Type`) ~ NA,
-                                       TRUE ~ "CFSV"))
-```
-
-```{r}
-# add day of week variable
-park_all <- park_all %>%
-  mutate(`Day Type` = case_when(
-    Weekday %in% c("Mon", "Tue", "Wed", "Thu") ~ "Weekday",
-    Weekday == "Fri" ~ "Fri",
-    Weekday %in% c("Sat", "Sun") ~ "Weekend"
-  )
-  )
-```
-
-```{r}
-park_all <- park_all %>%
-  mutate(Season = case_when(Month == "Dec" | Month == "Jan" | Month == "Feb" ~ "Winter", 
+                                       TRUE ~ "CFSV"),
+         `Day Type` = case_when(Weekday %in% c("Mon", "Tue", "Wed", "Thu") ~ "Weekday",
+                                Weekday == "Fri" ~ "Fri",
+                                Weekday %in% c("Sat", "Sun") ~ "Weekend"),
+         Season = case_when(Month == "Dec" | Month == "Jan" | Month == "Feb" ~ "Winter", 
                             Month == "Mar" | Month == "Apr" | Month == "May" ~ "Spring",
                             Month == "Jun" | Month == "Jul" | Month == "Aug"~ "Summer",
                             Month == "Sep" | Month == "Oct" | Month == "Nov" ~ "Autumn",
+                            is.na(Month) ~ NA,
+                            TRUE ~ "Other"),
+         `Hour type` = case_when(Hour > 6 & Hour <= 12 ~ "Morning", 
+                            Hour > 12 & Hour <= 17 ~ "Afternoon",
+                            Hour > 17 & Hour <= 22 ~ "Evening",
+                            (Hour > 22 & Hour <= 24) | (Hour >= 0 & Hour <= 6) ~ "Night",
                             is.na(Month) ~ NA,
                             TRUE ~ "Other"))
 ```

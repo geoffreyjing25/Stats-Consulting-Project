@@ -1,0 +1,15 @@
+---
+output: pdf_document
+---
+
+```{r results='asis', echo=FALSE, message=FALSE, warning=FALSE}
+library(gridExtra)
+library(knitr)
+data <- combined_table
+data1 <- data[1:25, ]
+data2 <- data[26:45, ]
+table1_kable <- kable(data1, format = 'latex')
+table2_kable <- kable(data2, format = 'latex')
+combined_table2 <- grid.arrange(tableGrob(table1_kable), tableGrob(table2_kable), ncol = 2)
+grid.draw(combined_table2)
+```
