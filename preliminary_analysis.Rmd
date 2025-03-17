@@ -4,6 +4,15 @@ Author: "Geoffrey Jing and Ryosuke Mega"
 output: html_document
 ---
 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  warning = FALSE,
+  message = FALSE,
+  echo = TRUE
+)
+q <- 0
+```
+
 Preliminary Data Loading
 
 ```{r}

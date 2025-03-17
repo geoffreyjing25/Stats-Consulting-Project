@@ -1,7 +1,17 @@
 ---
 title: "frequency_graphs"
+Author: "Geoffrey Jing and Ryosuke Mega"
 output: html_document
 ---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  warning = FALSE,
+  message = FALSE,
+  echo = TRUE
+)
+q <- 0
+```
 
 ```{r}
 library(stringr)
@@ -13,62 +23,29 @@ library(ggplot2)
 ```
 
 ```{r}
-park_all_filtered <- park_all %>%
+park_all
+park_all_with_other <- park_all %>%
+  mutate(check_extra_other = case_when(
+    `Call Type` == "Park Check" ~ "Park Check",
+    `Call Type` == "Extra Patrol" ~ "Extra Patrol",
+    TRUE ~ "Other"
+  ))
+park_all_filtered <- park_all_with_other %>%
   filter(!is.na(check_extra_other), !is.na(`Day Type`))
 ggplot(park_all_filtered, aes(x = check_extra_other)) +
   geom_bar() +
-  labs(title = "Frequency of Call Types",
+  labs(title = "Figure 1: Frequency of Call Types",
        x = "Call Type",
        y = "Call Frequency")
 ```
 
 ```{r}
-ggplot(park_all_filtered, aes(x = Season)) +
-  geom_bar() +
-  labs(title = "Total Call Frequency by Season",
-       x = "Season",
-       y = "Call Frequency")
+park_all_filtered <- park_all_filtered %>%
+  mutate(Season = factor(Season, levels = c("Spring", "Summer", "Autumn", "Winter")),
+         check_extra_other = factor(check_extra_other, levels = c("Other", "Extra Patrol", "Park Check")))
 ```
 
 ```{r}
-ggplot(park_all_filtered, aes(x = `Day Type`)) +
-  geom_bar() +
-  labs(title = "Total Call Frequency by Day Type",
-       x = "Day Type",
-       y = "Call Frequency")
-```
-
-```{r}
-ggplot(park_all_filtered, aes(x = `Weekday`)) +
-  geom_bar() +
-  labs(title = "Total Call Frequency by Day of the Week",
-       x = "Day of the Week",
-       y = "Call Frequency")
-```
-
-
-```{r}
-# rename other as CRVC, calls for service
-ggplot(park_all_filtered, aes(x = check_extra_other)) +
-  geom_bar() +
-  facet_wrap(~ `Day Type`) +
-  labs(title = "Call Type Frequency by Day of Week",
-       x = "Call Type",
-       y = "Frequency")
-```
-
-```{r}
-ggplot(park_all_filtered, aes(x = check_extra_other)) +
-  geom_bar() +
-  facet_wrap(~ Season) +
-  labs(title = "Call Type Frequency by Season",
-       x = "Call Type",
-       y = "Frequency") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-```
-
-```{r}
-# sort by frequency
 other_calls <- park_all %>%
   filter(!check_extra_other %in% c("Park Check", "Extra Patrol")) %>%
   filter(!is.na(`Call Type`))
@@ -76,16 +53,141 @@ other_calls <- park_all %>%
 top_10_other <- other_calls %>%
   count(`Call Type`) %>%
   top_n(10, n) %>%
+  arrange(n) %>%
   pull(`Call Type`)
 
 top_10_other_df <- other_calls %>%
-  filter(`Call Type` %in% top_10_other)
+  filter(`Call Type` %in% top_10_other) %>%
+  mutate(`Call Type` = factor(`Call Type`, levels = top_10_other))
 
-ggplot(top_10_other_df, aes(x = `Call Type`)) +
+ggplot(top_10_other_df, aes(y = `Call Type`, x = ..count.., fill = `Call Type`)) +
   geom_bar() +
-  labs(title = "Top 10 Call Types (Excluding Park Check & Extra Patrol)",
-       x = "Call Type",
-       y = "Frequency") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  labs(title = "Figure 1: Top 10 Call Types (Excluding Park Check & Extra Patrol)",
+       x = "Frequency",
+       y = "Call Type") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        plot.title = element_text(size = 24),
+        axis.title = element_text(size = 16),
+        axis.text = element_text(size = 14)) +
+  scale_fill_brewer(palette = "Set3")
+```
+
+```{r}
+# source for black text placement: https://stackoverflow.com/questions/67851879/adjusting-the-position-of-geom-text-label-for-stacked-bar-chart
+ggplot(park_all_filtered, aes(x = Season, fill = check_extra_other)) +
+  geom_bar(position = "stack") +
+  geom_text(
+    stat = "count",
+    aes(label = ..count..),
+    position = position_stack(vjust = 0.5),
+    color = "black",
+    size = 6
+  ) +
+  labs(
+    title = "Figure 2: Total Call Frequency by Season",
+    x = "Season",
+    y = "Call Frequency"
+  ) +
+  theme_minimal(base_size = 25)
+```
+
+
+
+```{r}
+park_all_filtered <- park_all_filtered %>%
+  mutate(Day_of_Week = factor(Weekday, levels = c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")),
+         check_extra_other = factor(check_extra_other, levels = c("Other", "Extra Patrol", "Park Check")))
+
+ggplot(park_all_filtered, aes(x = Day_of_Week, fill = check_extra_other)) +
+  geom_bar(position = "stack") +
+  geom_text(
+    stat = "count",
+    aes(label = ..count..),
+    position = position_stack(vjust = 0.5),
+    color = "black",
+    size = 6
+  ) +
+  labs(
+    title = "Figure 3: Total Call Frequency by Day of Week",
+    x = "Day of Week",
+    y = "Call Frequency") +
+  theme_minimal(base_size = 25)
+```
+
+
+```{r}
+library(lubridate)
+
+top_10_call_types <- park_all %>%
+  count(`Call Type`) %>%
+  top_n(10, n) %>%
+  pull(`Call Type`)
+
+park_all_top_10 <- park_all %>%
+  filter(`Call Type` %in% top_10_call_types)
+
+time_series_data <- park_all_top_10 %>%
+  group_by(Hour, `Call Type`) %>%
+  summarise(count = n(), .groups = "drop")
+
+park_extra_data <- time_series_data %>%
+  filter(`Call Type` %in% c("Park Check", "Extra Patrol"))
+
+other_data <- time_series_data %>%
+  filter(!`Call Type` %in% c("Park Check", "Extra Patrol"))
+
+plot_park_extra_line <- ggplot(park_extra_data, aes(x = Hour, y = count, color = `Call Type`)) +
+  geom_line(size = 0.8) +
+  labs(title = "Figure 4: Park Check & Extra Patrol Frequency Over Time of Day",
+       x = "Hour of Day",
+       y = "Frequency",
+       color = "Call Type") +
+  theme_minimal(base_size = 25)
+
+print(plot_park_extra_line)
+```
+
+```{r}
+time_series_data <- park_all %>%
+  group_by(Hour, `Call Type`) %>%
+  summarise(count = n(), .groups = "drop")
+
+atv_suspicious_data <- time_series_data %>%
+  filter(`Call Type` %in% c("ATV/Boat/Snowmobile Complaint", "Suspicious"))
+
+plot_atv_suspicious <- ggplot(atv_suspicious_data, aes(x = Hour, y = count, color = `Call Type`)) +
+  geom_line(size = 0.8) +
+  labs(title = "Figure 5: ATV/Boat/Snowmobile Complaint & Suspicious Frequency Over Time of Day",
+       x = "Hour of Day",
+       y = "Frequency",
+       color = "Call Type") +
+  theme_minimal(base_size = 20)
+
+print(plot_atv_suspicious)
+```
+
+```{r}
+plot_top_10_other_faceted <- ggplot(top_10_other_data, aes(x = Hour, y = count, color = `Call Type`)) +
+  geom_line(size = 1.0) +
+  facet_wrap(~ `Call Type`, scales = "free") +
+  labs(
+    title = "Top 10 Call Types (Excluding Top 4) Over Time of Day",
+    x = "Hour of Day",
+    y = "Frequency",
+    color = "Call Type"
+  ) +
+  scale_color_viridis_d(option = "plasma")  +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    strip.text = element_text(size = 10, face = "bold"),
+    axis.text.x = element_text(),
+    axis.text.y = element_text(),
+    axis.ticks = element_line(),
+    panel.grid = element_line(color = "gray90")
+  )
+
+print(plot_top_10_other_faceted)
 ```
 
