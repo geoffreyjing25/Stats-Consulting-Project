@@ -30,7 +30,6 @@ colnames(falls_creek_park)
 falls_creek_park <- falls_creek_park %>%
   mutate(Timestamp = gsub("\n", " ", Timestamp),
          Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
-#str(falls_creek_park)
 ```
 
 
@@ -41,7 +40,6 @@ colnames(velzke_park)
 velzke_park <- velzke_park %>%
   mutate(Timestamp = gsub("\n", " ", Timestamp),
          Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
-#str(velzke_park)
 ```
 
 ```{r}
@@ -51,9 +49,6 @@ colnames(shager_park)
 shager_park <- shager_park %>%
   mutate(Timestamp = gsub("\n", " ", Timestamp),
          Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
-#str(shager_park)
-# shager_park %>%
-#   filter(!inherits(`Timestamp`, "POSIXct"))
 ```
 
 ```{r}
@@ -63,7 +58,6 @@ colnames(ackman_park)
 ackman_park <- ackman_park %>%
   mutate(Timestamp = gsub("\n", " ", Timestamp),
          Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
-#str(ackman_park)
 ```
 
 ```{r}
@@ -73,7 +67,6 @@ colnames(albers_park)
 albers_park <- albers_park %>%
   mutate(Timestamp = gsub("\n", " ", Timestamp),
          Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
-#str(albers_park)
 ```
 
 ```{r}
@@ -83,7 +76,6 @@ colnames(cannon_rvr_wildness_area_all)
 cannon_rvr_wildness_area_all <- cannon_rvr_wildness_area_all %>%
   mutate(Timestamp = gsub("\n", " ", Timestamp),
          Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
-#str(cannon_rvr_wildness_area_all)
 ```
 
 ```{r}
@@ -93,7 +85,6 @@ colnames(caron_park)
 caron_park <- caron_park %>%
   mutate(Timestamp = gsub("\n", " ", Timestamp),
          Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
-#str(caron_park)
 ```
 
 ```{r}
@@ -103,7 +94,6 @@ colnames(caron_park)
 circle_lake_park <- circle_lake_park %>%
   mutate(Timestamp = gsub("\n", " ", Timestamp),
          Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
-#str(circle_lake_park)
 ```
 
 ```{r}
@@ -113,7 +103,6 @@ colnames(hirdler_park)
 hirdler_park <- hirdler_park %>%
   mutate(Timestamp = gsub("\n", " ", Timestamp),
          Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
-#str(hirdler_park)
 ```
 
 ```{r}
@@ -123,7 +112,6 @@ colnames(kalina_park)
 kalina_park <- kalina_park %>%
   mutate(Timestamp = gsub("\n", " ", Timestamp),
          Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
-#str(kalina_park)
 ```
 
 ```{r}
@@ -133,7 +121,6 @@ colnames(king_mill_park)
 king_mill_park <- king_mill_park %>%
   mutate(Timestamp = gsub("\n", " ", Timestamp),
          Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
-#str(king_mill_park)
 ```
 
 ```{r}
@@ -143,7 +130,6 @@ colnames(king_mill_park)
 mccullough_park <- mccullough_park %>%
   mutate(Timestamp = gsub("\n", " ", Timestamp),
          Timestamp = as.POSIXct(Timestamp, format = "%m/%d/%Y %H:%M:%S"))
-#str(mccullough_park)
 ```
 
 ```{r}
@@ -199,7 +185,6 @@ save(park_all, file = "park_all.rda")
 ```
 
 ```{r}
-# can see which values have null for park names, might want to clean this later
 null_vals <- park_all %>% filter(is.na(`Park Name`))
 ```
 
